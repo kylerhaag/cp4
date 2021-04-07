@@ -121,15 +121,31 @@ app.get('/api/users', async(req, res) => {
         res.sendStatus(500);
     }
 });
+app.delete('/api/users/:id', async(req, res) => {
+    try {
+        await User.deleteOne({
+            _id: req.params.id
+        });
+        res.sendStatus(200);
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+});
 
 // Schema for items
 const teddySchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.ObjectId,
-        ref: 'User'
+        ref: 'User',
+
     },
-    text: String,
-    active: Boolean,
+    // text: String,
+    // active: Boolean,
+    name: String,
+    image: String,
+    age: String,
+    gender: String
 })
 
 const Teddy = mongoose.model('Teddy', teddySchema);
@@ -143,8 +159,12 @@ app.post('/api/users/:userID/teddys', async(req, res) => {
         }
         let teddy = new Teddy({
             user: user,
-            text: req.body.text,
-            //completed: req.body.completed,
+            //text: req.body.text,
+            name: req.body.name,
+            image: req.body.image,
+            age: req.body.age,
+            gender: req.body.gender
+                //completed: req.body.completed,
         });
         await teddy.save();
         res.send(teddy);
@@ -176,10 +196,10 @@ app.put('/api/users/:userID/teddys/:teddyID', async(req, res) => {
             res.send(404);
             return;
         }
-        teddy.name = req.body.name;
-        teddy.age = req.body.age;
-        teddy.image = req.body.image
-        teddy.gender = req.body.gender
+        teddy.name = req.body.name
+        teddy.age = req.body.age
+            // teddy.image = req.body.image
+            // teddy.gender = req.body.gender
 
         await teddy.save();
         res.send(teddy);

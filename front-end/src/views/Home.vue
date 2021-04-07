@@ -11,8 +11,10 @@
         <label>Your Name</label>
         <input v-model="userName" type="text" />
         <p></p>
-        <button type="submit" key="name">Change User</button>
+        <button type="submit" key="name">Create New User</button>
       </form>
+      <p></p>
+      <button @click="deleteUser(user)" type="submit">Delete User</button>
     </div>
 
     <div>
@@ -69,8 +71,8 @@ export default {
       addItem: null,
       teddys: [],
       age: "",
-      gender: "",
       image: "",
+      gender: "",
       userName: "",
       users: [],
       user: null
@@ -99,6 +101,26 @@ export default {
         console.log(error);
       }
     },
+    async deleteUser(user) {
+      try {
+        await axios.delete(`/api/users/${this.user._id}`);
+        this.findItem = null;
+        this.getItem1();
+        return true;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    //I keep getting a get error when I delete the user
+    //Kind of helps.. not error log but button stays
+    async getItem1() {
+      try {
+        const response = await axios.get(`/api/users`);
+        this.teddys = response.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async getUsers() {
       try {
         const response = await axios.get("/api/users");
@@ -120,10 +142,6 @@ export default {
 
     async upload() {
       try {
-        //teddys.push(teddy.name);
-        // const formData = new FormData();
-        // formData.append("photo", this.file, this.file.name);
-        // let r1 = await axios.post("/api/photos", formData);
         let r2 = await axios.post("/api/teddy", {
           name: this.name,
           age: this.age,

@@ -1,27 +1,29 @@
 <template>
   <div class="home">
     <button v-for="user in users" :key="user.id" @click="selectUser(user)">{{user.name}}</button>
+    <h3 v-if="!users.length">You have no User selected! Go to Home and create a new user.</h3>
 
-    <h2>Look at your Teddies</h2>
-    <div v-for="teddy in teddys" :key="teddy.name">
-      <h3>This is {{teddy.name}}</h3>
-      <h3 v-if="teddy.gender == 'Female'">She is {{teddy.age}} years old</h3>
-      <h3 v-else>He is {{teddy.age}} years old</h3>
+    <div v-else>
+      <div v-for="teddy in teddys" :key="teddy.name">
+        <h3>This is {{teddy.name}}</h3>
+        <h3 v-if="teddy.gender == 'Female'">She is {{teddy.age}} years old</h3>
+        <h3 v-else>He is {{teddy.age}} years old</h3>
 
-      <img alt :src="'/images/' + teddy.image" />
-      <p></p>
-      <button @click="deleteItem(teddy)">Remove Teddy</button>
-      <p></p>
-      <button @click="openEdits(teddy)">Edit Teddy's characteristics</button>
-      <p></p>
-      <div v-if="edits == true">
-        <label for="name">Teddy's New Name</label>
-        <input v-model="name" type="text" placeholder="name" />
+        <img alt :src="'/images/' + teddy.image" />
         <p></p>
-        <label for="age">Teddy's New Age</label>
-        <input v-model="age" type="number" min="0" />
+        <button @click="deleteItem(teddy)">Remove Teddy</button>
         <p></p>
-        <button @click="completeEdits(teddy)">Complete Edits</button>
+        <button @click="openEdits(teddy)">Edit Teddy's characteristics</button>
+        <p></p>
+        <div v-if="edits == true">
+          <label for="name">Teddy's New Name</label>
+          <input v-model="name" type="text" placeholder="name" />
+          <p></p>
+          <label for="age">Teddy's New Age</label>
+          <input v-model="age" type="number" min="0" />
+          <p></p>
+          <button @click="completeEdits(teddy)">Complete Edits</button>
+        </div>
       </div>
     </div>
     <p></p>
@@ -73,10 +75,10 @@ export default {
       this.user = user;
       this.getItems();
     },
-    async completeEdits(item) {
+    async completeEdits(teddy) {
       this.edits = false;
       try {
-        await axios.put("/api/teddy/" + item._id, {
+        await axios.put(`/api/users/${this.user._id}/teddys/${teddy._id}`, {
           name: this.name,
           age: this.age
         });
@@ -105,9 +107,9 @@ export default {
         console.log(error);
       }
     },
-    async deleteItem(item) {
+    async deleteItem(teddy) {
       try {
-        await axios.delete("/api/teddy/" + item._id);
+        await axios.delete(`/api/users/${this.user._id}/teddys/${teddy._id}`);
         this.findItem = null;
         this.getItems();
         return true;
@@ -121,6 +123,6 @@ export default {
 
 <style>
 img {
-  width: 50%;
+  width: 60%;
 }
 </style>
