@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div class="Teddys">
+    <!-- <div class="Teddys">
       <div class="Teddy" v-for="teddy in teddys" :key="name">
         <div class="info">
           <h1>{{teddys.name}}</h1>
@@ -14,7 +14,7 @@
           <button v-on:click="removeItemsFromCart(product)" class="auto">Remove from Cart</button>
         </div>
       </div>
-    </div>
+    </div>-->
   </div>
 </template>
 

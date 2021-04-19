@@ -3,50 +3,64 @@
     <h1>Welcome to Teddy Creations!</h1>
     <img alt="Teddy logo" src="../assets/Teddy1.jpg" />
     <div>
-      <h2>What is your name?</h2>
-      <div id="projects">
-        <button v-for="user in users" :key="user.id" @click="selectUser(user)">{{user.name}}</button>
+      <h2>Don't have an account?</h2>
+      <div class="hero">
+        <div class="heroBox">
+          <form class="pure-form">
+            <fieldset>
+              <legend>Register for an account</legend>
+              <input placeholder="first name" v-model="firstName" />
+              <input placeholder="last name" v-model="lastName" />
+            </fieldset>
+            <fieldset>
+              <input placeholder="username" v-model="username" />
+              <input type="password" placeholder="password" v-model="password" />
+            </fieldset>
+            <fieldset>
+              <button
+                type="submit"
+                class="pure-button pure-button-primary"
+                @click.prevent="register"
+              >Create New Account</button>
+            </fieldset>
+          </form>
+          <p v-if="error" class="error">{{error}}</p>
+        </div>
       </div>
-      <form @submit.prevent="addUser">
-        <label>Your Name</label>
+      <!-- <div id="projects">
+        <button v-for="user in users" :key="user.id" @click="selectUser(user)">{{user.name}}</button>
+      </div>-->
+      <!-- <form @submit.prevent="addUser">
+        <label>First Name</label>
+        <input v-model="firstName" type="text" />
+        <p></p>
+        <label>Last Name</label>
+        <input v-model="lastName" type="text" />
+        <p></p>
+        <label>Username</label>
         <input v-model="userName" type="text" />
+        <p></p>
+        <label>Password</label>
+        <input v-model="password" type="password" />
         <p></p>
         <button type="submit" key="name">Create New User</button>
       </form>
+      <p></p>-->
+      <h2>
+        Already have an account?
+        <a href="/Teddy">Login!</a>
+      </h2>
+
+      <!-- <label>Username</label>
+      <input v-model="userName" type="text" />
       <p></p>
-      <button @click="deleteUser(user)" type="submit">Delete User</button>
+      <label>Password</label>
+      <input v-model="password" type="password" />
+      <p></p>
+      <button @click="deleteUser(user)" type="submit">Login</button>
+      <p></p>
+      <button @click="deleteUser(user)" type="submit">Delete User</button>-->
     </div>
-
-    <div>
-      <h2>Build your own Teddy!</h2>
-    </div>
-    <p>
-      <label for="name">Teddy's Name</label>
-      <input id="name" v-model="name" type="text" name="name" />
-    </p>
-    <p>
-      <label for="age">Teddy's Age</label>
-      <input id="age" v-model="age" type="number" name="age" min="0" />
-    </p>
-
-    <p>
-      <label for="gender">Teddy's Gender</label>
-      <select v-model="gender">
-        <option>Male</option>
-        <option>Female</option>
-      </select>
-    </p>
-    <p>
-      <label for="image">Image</label>
-      <select v-model="image" name="image">
-        <option v-for="image in images" :key="image">{{image}}</option>
-      </select>
-    </p>
-
-    <p>
-      <!-- clidk = upload -->
-      <input v-on:click="addItem1" type="submit" value="Add a New Teddy" />
-    </p>
   </div>
 </template>
 
@@ -75,7 +89,13 @@ export default {
       gender: "",
       userName: "",
       users: [],
-      user: null
+      user: null,
+
+      error: "",
+      firstName: "",
+      lastName: "",
+      username: "",
+      password: ""
     };
   },
 
@@ -84,6 +104,26 @@ export default {
     this.getUsers();
   },
   methods: {
+    async register() {
+      this.error = "";
+      this.errorLogin = "";
+      if (!this.firstName || !this.lastName || !this.username || !this.password)
+        return;
+      try {
+        let response = await axios.post("/api/users", {
+          firstName: this.firstName,
+          lastName: this.lastName,
+          username: this.username,
+          password: this.password
+        });
+        this.$root.$data.user = response.data.user;
+      } catch (error) {
+        this.error = error.response.data.message;
+        this.$root.$data.user = null;
+      }
+    },
+
+    ////////
     fileChanged(event) {
       this.file = event.target.files[0];
     },
@@ -105,7 +145,7 @@ export default {
       try {
         await axios.delete(`/api/users/${this.user._id}`);
         this.findItem = null;
-        this.getItem1();
+        await this.getUsers();
         return true;
       } catch (error) {
         console.log(error);

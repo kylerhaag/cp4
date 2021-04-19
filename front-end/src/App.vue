@@ -7,7 +7,7 @@
     </div>
     <router-view />
     <div class="footer">
-      <div>Website designed by Kyler Haag</div>Check out Kyler's code on
+      <div>Total hours spent on Final Project: 5.5 - Website designed by Kyler Haag</div>Check out Kyler's code on
       <a href="https://github.com/kylerhaag/cp4">GitHub</a>
     </div>
   </div>

@@ -6,7 +6,8 @@ import mock from './mock.js'
 Vue.config.productionTip = false
 
 let data = {
-    Teddy: mock,
+    user: null,
+    //Teddy: mock,
     teddys: []
 }
 
