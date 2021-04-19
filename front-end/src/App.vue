@@ -24,15 +24,16 @@
 
 #nav {
   padding: 30px;
+  background-color: #343a40;
 }
 
 #nav a {
   font-weight: bold;
-  color: #2c3e50;
+  color: #677786;
 }
 
 #nav a.router-link-exact-active {
-  color: #dfcf5d;
+  color: #fff5a5;
 }
 
 .footer {

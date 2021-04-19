@@ -121,6 +121,7 @@ export default {
         this.error = error.response.data.message;
         this.$root.$data.user = null;
       }
+      //How to link to other page when correct register?
     },
 
     ////////

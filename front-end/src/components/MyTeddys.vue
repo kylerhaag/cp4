@@ -35,6 +35,7 @@
       </select>
     </p>
     <div v-if="teddys.length">
+      <hr />
       <h2>Your Teddys!</h2>
     </div>
     <p>
@@ -186,10 +187,16 @@ export default {
 <style scoped>
 .menu {
   display: flex;
-  justify-content: space-between;
+  justify-content: left;
+  background-color: #343a40;
+  color: #fff5a5;
+  padding-left: 20px;
 }
 
 .menu h2 {
-  font-size: 14px;
+  font-size: 16px;
+}
+img {
+  width: 50%;
 }
 </style>
